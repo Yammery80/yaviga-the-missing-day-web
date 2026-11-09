@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Missing Day · YAVIGA</title>
+<meta name="description" content="The Missing Day, un videojuego de YAVIGA (Yamilet Video Games). Descárgalo gratis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+:root{
+  --crema:#F3E4C8; --beige:#D8C2A5; --cafe-claro:#A98268; --cafe:#5A4033;
+  --terracota:#B96F5A; --salvia:#87977A; --azul:#34495E; --gris:#7A6D65; --dorado:#C9A24D;
+  --noche:#2A1F19; --noche-2:#35271F;
+  --pixel:'Press Start 2P', 'Courier New', monospace;
+  --texto:'Nunito', system-ui, sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--noche);color:var(--crema);font-family:var(--texto);font-size:1.05rem;line-height:1.65}
+img{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--dorado);outline-offset:3px}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- Botón estilo pixel ---------- */
+.btn{
+  display:inline-block;font-family:var(--pixel);font-size:.8rem;letter-spacing:.04em;text-decoration:none;cursor:pointer;
+  background:var(--azul);color:var(--crema);border:0;padding:1.05rem 1.6rem;
+  box-shadow:0 0 0 3px var(--dorado), 0 0 0 6px var(--noche), 6px 9px 0 6px rgba(0,0,0,.45);
+  transition:transform .12s;
+}
+.btn:hover{transform:translateY(-3px)}
+.btn:active{transform:translateY(2px)}
+.btn.dorado{background:var(--dorado);color:var(--noche);box-shadow:0 0 0 3px var(--crema), 0 0 0 6px var(--noche), 6px 9px 0 6px rgba(0,0,0,.45)}
+.btn.chico{font-size:.62rem;padding:.7rem 1rem;box-shadow:0 0 0 2px var(--dorado)}
+.btn.terracota{background:var(--terracota);box-shadow:0 0 0 2px var(--crema)}
+
+/* ---------- Navegación ---------- */
+header{position:fixed;inset:0 0 auto 0;z-index:20;display:flex;align-items:center;justify-content:space-between;gap:1rem;padding:.8rem 1.4rem;
+  background:linear-gradient(rgba(42,31,25,.92),rgba(42,31,25,0))}
+header .marca{display:flex;align-items:center;gap:.7rem;text-decoration:none;font-family:var(--pixel);font-size:.7rem}
+header .marca img{width:44px;height:44px;object-fit:contain;background:#fff;border-radius:50%;padding:3px}
+nav{display:flex;gap:1.4rem;align-items:center}
+nav a{font-family:var(--pixel);font-size:.62rem;text-decoration:none;color:var(--crema);padding:.4rem 0;border-bottom:3px solid transparent}
+nav a:hover{border-color:var(--dorado)}
+
+/* ---------- Portada ---------- */
+.portada{position:relative;background:var(--noche)}
+.portada .arte{width:100%;height:auto;max-height:100vh;object-fit:cover;image-rendering:pixelated}
+.portada::after{content:"";position:absolute;inset:auto 0 0 0;height:32%;background:linear-gradient(transparent,var(--noche));pointer-events:none}
+.portada .accion{position:absolute;left:0;right:0;bottom:7%;z-index:5;display:flex;flex-direction:column;align-items:center;gap:1rem}
+.portada .parpadeo{font-family:var(--pixel);font-size:.6rem;color:var(--crema);text-shadow:2px 2px 0 var(--noche);animation:blink 1.1s steps(2,jump-none) infinite}
+@keyframes blink{50%{opacity:.25}}
+@media (prefers-reduced-motion:reduce){.portada .parpadeo{animation:none}}
+
+/* ---------- Secciones ---------- */
+section{padding:5.5rem 1.4rem}
+.cont{max-width:1040px;margin:0 auto}
+h2{font-family:var(--pixel);font-size:clamp(1.1rem,3vw,1.7rem);line-height:1.5;color:var(--dorado);margin-bottom:1.6rem;text-shadow:3px 3px 0 var(--noche)}
+p.lead{max-width:62ch}
+
+#juego{background:var(--noche-2);border-block:4px solid var(--cafe)}
+.juego-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:3rem;align-items:center}
+.ficha{background:var(--noche);border:4px solid var(--cafe-claro);padding:1.5rem;box-shadow:8px 8px 0 rgba(0,0,0,.4)}
+.ficha dl{display:grid;grid-template-columns:auto 1fr;gap:.7rem 1.2rem;font-size:.95rem}
+.ficha dt{font-family:var(--pixel);font-size:.55rem;color:var(--dorado);align-self:center}
+.ficha dd{color:var(--crema)}
+
+#descarga{background:var(--azul);text-align:center;position:relative}
+#descarga h2{color:var(--crema)}
+#descarga p{margin:0 auto 2rem;max-width:52ch;color:var(--beige)}
+.nota{margin-top:1.6rem;font-size:.9rem;color:var(--beige)}
+
+#nosotros{background:var(--crema);color:var(--cafe)}
+#nosotros h2{color:var(--cafe);text-shadow:3px 3px 0 var(--beige)}
+.nos-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:3.5rem;align-items:center}
+.nos-logo{background:#fff;border:4px solid var(--cafe);box-shadow:8px 8px 0 var(--terracota);padding:1rem}
+.nos-logo img{width:100%;height:auto}
+.equipo{margin-top:3.2rem}
+.equipo h3{font-family:var(--pixel);font-size:.8rem;margin-bottom:1.4rem;color:var(--terracota)}
+.miembros{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1.6rem}
+.miembro{background:#fff8ea;border:3px solid var(--cafe-claro);padding:1rem;text-align:center;position:relative}
+.miembro img{width:100%;aspect-ratio:1;object-fit:cover;border:3px solid var(--cafe);margin-bottom:.8rem;background:var(--beige)}
+.miembro b{display:block;font-weight:800}
+.miembro span{font-size:.9rem;color:var(--gris)}
+.miembro .quitar{position:absolute;top:6px;right:6px;display:none}
+body.admin .miembro .quitar{display:block}
+.vacio{color:var(--gris);font-size:.95rem}
+
+/* ---------- Reseñas ---------- */
+#resenas{background:var(--noche);border-block:4px solid var(--cafe)}
+.res-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:3rem;align-items:start}
+.promedio{display:flex;align-items:center;gap:1.2rem;margin-bottom:1.6rem}
+.promedio .num{font-family:var(--pixel);font-size:2rem;color:var(--dorado)}
+.promedio small{display:block;color:var(--beige)}
+.estrellas-fijas{color:var(--dorado);letter-spacing:.1em;font-size:1.15rem}
+.estrellas-fijas .off{color:var(--gris)}
+.form-res{background:var(--noche-2);border:4px solid var(--cafe-claro);padding:1.4rem;box-shadow:8px 8px 0 rgba(0,0,0,.4)}
+.form-res h3{font-family:var(--pixel);font-size:.75rem;color:var(--dorado);margin-bottom:.4rem}
+.estrellas{display:inline-flex;flex-direction:row-reverse;gap:.15rem;border:0}
+.estrellas input{position:absolute;opacity:0;width:1px;height:1px}
+.estrellas label{font-size:2rem;line-height:1;color:var(--gris);cursor:pointer;margin:0}
+.estrellas input:checked ~ label,.estrellas label:hover,.estrellas label:hover ~ label{color:var(--dorado)}
+.estrellas input:focus-visible + label{outline:3px solid var(--dorado)}
+.lista-res{display:grid;gap:1.1rem}
+.res{background:var(--noche-2);border-left:6px solid var(--terracota);padding:1rem 1.2rem;position:relative}
+.res header{position:static;background:none;padding:0;display:flex;gap:.8rem;align-items:baseline;flex-wrap:wrap}
+.res b{font-weight:800}
+.res time{font-size:.8rem;color:var(--gris)}
+.res p{margin-top:.4rem;overflow-wrap:anywhere}
+.res .quitar{position:absolute;top:8px;right:8px;display:none}
+body.admin .res .quitar{display:block}
+.estadisticas{display:grid;grid-template-columns:1fr 1fr;gap:.6rem;margin-top:.4rem}
+.estadisticas div{background:var(--noche);border:3px solid var(--cafe-claro);padding:.7rem;text-align:center}
+.estadisticas b{display:block;font-family:var(--pixel);font-size:1.1rem;color:var(--dorado);margin-bottom:.3rem}
+.estadisticas span{font-size:.8rem;color:var(--beige)}
+
+footer{background:var(--noche);padding:2.2rem 1.4rem;text-align:center;font-size:.9rem;color:var(--beige);border-top:4px solid var(--cafe)}
+footer button{background:none;border:0;color:var(--gris);font:inherit;text-decoration:underline;cursor:pointer;margin-left:.6rem}
+
+/* ---------- Panel del equipo ---------- */
+dialog{margin:auto;border:4px solid var(--dorado);background:var(--noche-2);color:var(--crema);padding:1.6rem;max-width:min(92vw,420px);width:100%}
+dialog::backdrop{background:rgba(0,0,0,.65)}
+dialog h3{font-family:var(--pixel);font-size:.8rem;color:var(--dorado);margin-bottom:1.2rem}
+label{display:block;font-size:.9rem;font-weight:600;margin:.8rem 0 .3rem}
+input[type=text],input[type=email],input[type=password],input[type=url],textarea{width:100%;padding:.6rem .7rem;font:inherit;background:var(--crema);color:var(--cafe);border:3px solid var(--cafe-claro)}
+input[type=file]{width:100%;font-size:.85rem;color:var(--beige)}
+textarea{min-height:90px;resize:vertical}
+.error{color:#ffb4a2;font-size:.9rem;margin-top:.7rem;min-height:1.2em}
+.fila{display:flex;gap:.8rem;margin-top:1.2rem;flex-wrap:wrap}
+
+#panel{position:fixed;right:0;top:0;bottom:0;width:min(100%,390px);z-index:40;background:var(--noche-2);border-left:4px solid var(--dorado);padding:1.2rem;overflow-y:auto;transform:translateX(100%);transition:transform .25s}
+#panel.abierto{transform:none}
+#panel h3{font-family:var(--pixel);font-size:.7rem;color:var(--dorado);margin:1.6rem 0 .4rem}
+#panel h3:first-of-type{margin-top:.6rem}
+#panel .cerrar{float:right}
+.progreso{height:10px;background:var(--noche);border:2px solid var(--cafe-claro);margin-top:.6rem;display:none}
+.progreso i{display:block;height:100%;width:0;background:var(--dorado)}
+#abrirPanel{position:fixed;right:1rem;bottom:1rem;z-index:30;display:none}
+body.admin #abrirPanel{display:block}
+.aviso{position:fixed;left:50%;bottom:1.2rem;transform:translateX(-50%);z-index:60;background:var(--dorado);color:var(--noche);font-weight:800;padding:.7rem 1.2rem;border:3px solid var(--noche);display:none}
+
+@media (max-width:820px){
+  .juego-grid,.nos-grid,.res-grid{grid-template-columns:1fr;gap:2rem}
+  nav a:not(.btn){display:none}
+  .portada .accion{position:static;padding:1.6rem 1rem 0;background:var(--noche)}
+  .portada::after{display:none}
+  section{padding:4rem 1.2rem}
+}
+</style>
+</head>
+<body>
+
+<header>
+  <a class="marca" href="#inicio"><img id="logoNav" src="assets/logo.png" alt="Logo de YAVIGA"><span>YAVIGA</span></a>
+  <nav>
+    <a href="#juego">El juego</a>
+    <a href="#resenas">Reseñas</a>
+    <a href="#nosotros">Nosotros</a>
+    <a class="btn chico dorado" href="#descarga">Descargar</a>
+  </nav>
+</header>
+
+<main>
+  <!-- PORTADA: The Missing Day -->
+  <div class="portada" id="inicio">
+    <h1 class="sr-only">The Missing Day</h1>
+    <img class="arte" id="arteJuego" src="assets/the-missing-day.png" alt="The Missing Day: una chica sentada en su habitación junto a su perro, mirando por la ventana">
+    <div class="accion">
+      <a class="btn dorado descargar-link" href="downloads/TheMissingDay.zip" download>DESCARGA AQUÍ</a>
+      <span class="parpadeo">PC · gratis · archivo .zip</span>
+    </div>
+  </div>
+
+  <section id="juego">
+    <div class="cont juego-grid">
+      <div>
+        <h2>Sobre el juego</h2>
+        <p class="lead" id="textoJuego">Un día desapareció y tienes que encontrarlo. Explora la habitación, descubre pistas y recupera lo que se perdió.</p>
+      </div>
+      <div class="ficha">
+        <dl>
+          <dt>JUEGO</dt><dd>The Missing Day</dd>
+          <dt>ESTUDIO</dt><dd>YAVIGA</dd>
+          <dt>ESTILO</dt><dd>Pixel art</dd>
+          <dt>PRECIO</dt><dd>Gratis</dd>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section id="descarga">
+    <div class="cont">
+      <h2>Juega The Missing Day</h2>
+      <p>Descarga el juego, descomprime el archivo .zip y abre el ejecutable.</p>
+      <a class="btn dorado descargar-link" href="downloads/TheMissingDay.zip" download>DESCARGA AQUÍ</a>
+      <p class="nota" id="notaVersion"></p>
+    </div>
+  </section>
+
+  <section id="resenas">
+    <div class="cont res-grid">
+      <div>
+        <h2>Reseñas</h2>
+        <div class="promedio" id="promedio" hidden>
+          <span class="num" id="resNum">0.0</span>
+          <div><span class="estrellas-fijas" id="resEstrellas" aria-hidden="true"></span><small id="resTotal"></small></div>
+        </div>
+        <form class="form-res" id="formRes">
+          <h3>Deja tu reseña</h3>
+          <label for="rNombre">Tu nombre</label>
+          <input id="rNombre" type="text" maxlength="40" required autocomplete="nickname">
+          <fieldset class="estrellas" style="margin-top:.9rem">
+            <legend class="sr-only">Calificación de 1 a 5 estrellas</legend>
+            <input type="radio" name="rating" id="r5" value="5"><label for="r5" title="5 estrellas">★<span class="sr-only">5 estrellas</span></label>
+            <input type="radio" name="rating" id="r4" value="4"><label for="r4" title="4 estrellas">★<span class="sr-only">4 estrellas</span></label>
+            <input type="radio" name="rating" id="r3" value="3"><label for="r3" title="3 estrellas">★<span class="sr-only">3 estrellas</span></label>
+            <input type="radio" name="rating" id="r2" value="2"><label for="r2" title="2 estrellas">★<span class="sr-only">2 estrellas</span></label>
+            <input type="radio" name="rating" id="r1" value="1"><label for="r1" title="1 estrella">★<span class="sr-only">1 estrella</span></label>
+          </fieldset>
+          <label for="rTexto">¿Qué te pareció el juego?</label>
+          <textarea id="rTexto" maxlength="500" placeholder="Cuéntanos tu experiencia"></textarea>
+          <p class="error" id="rError" role="alert"></p>
+          <div class="fila"><button class="btn chico dorado" type="submit">Publicar reseña</button></div>
+        </form>
+        <p class="vacio" id="rGracias" hidden>¡Gracias por tu reseña!</p>
+      </div>
+      <div class="lista-res" id="listaRes"><p class="vacio">Aún no hay reseñas. Sé la primera persona en opinar.</p></div>
+    </div>
+  </section>
+
+  <section id="nosotros">
+    <div class="cont">
+      <div class="nos-grid">
+        <div class="nos-logo"><img id="logoNos" src="assets/logo.png" alt="Logo de YAVIGA, Yamilet Video Games"></div>
+        <div>
+          <h2>Nosotros: YAVIGA</h2>
+          <p class="lead" id="textoNosotros">Somos YAVIGA, Yamilet Video Games. Creamos videojuegos para aprender de una forma nueva: la nueva era del aprendizaje.</p>
+        </div>
+      </div>
+      <div class="equipo">
+        <h3>El equipo</h3>
+        <div class="miembros" id="miembros"><p class="vacio">Pronto presentaremos al equipo.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  © <span id="anio"></span> YAVIGA · Yamilet Video Games
+  <button id="btnAcceso" type="button">Acceso del equipo</button>
+</footer>
+
+<!-- Login -->
+<dialog id="dlgLogin">
+  <h3>Acceso del equipo</h3>
+  <form id="formLogin">
+    <label for="lEmail">Correo</label><input id="lEmail" type="email" autocomplete="username" required>
+    <label for="lPass">Contraseña</label><input id="lPass" type="password" autocomplete="current-password" required>
+    <p class="error" id="lError" role="alert"></p>
+    <div class="fila">
+      <button class="btn chico dorado" type="submit">Entrar</button>
+      <button class="btn chico" type="button" id="lCancel">Cancelar</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- Panel de administración -->
+<button class="btn chico dorado" id="abrirPanel" type="button">EDITAR SITIO</button>
+<aside id="panel" aria-label="Panel de edición">
+  <button class="btn chico cerrar" id="cerrarPanel" type="button">Cerrar</button>
+  <h3>Estadísticas</h3>
+  <div class="estadisticas">
+    <div><b id="stVistas">0</b><span>visitas</span></div>
+    <div><b id="stDesc">0</b><span>clics en descargar</span></div>
+  </div>
+
+  <h3>Imagen de The Missing Day</h3>
+  <input type="file" id="fArte" accept="image/*">
+  <div class="fila"><button class="btn chico" id="bArte" type="button">Subir imagen</button></div>
+
+  <h3>Logo de YAVIGA</h3>
+  <input type="file" id="fLogo" accept="image/*">
+  <div class="fila"><button class="btn chico" id="bLogo" type="button">Subir logo</button></div>
+
+  <h3>Archivo del juego (.zip)</h3>
+  <input type="file" id="fZip" accept=".zip,application/zip">
+  <label for="vVersion">Versión (opcional)</label><input id="vVersion" type="text" placeholder="v1.0">
+  <div class="fila"><button class="btn chico" id="bZip" type="button">Subir zip</button></div>
+  <div class="progreso" id="progZip"><i></i></div>
+  <label for="uZip">O pega un enlace de descarga</label><input id="uZip" type="url" placeholder="https://...">
+  <div class="fila"><button class="btn chico" id="bUrl" type="button">Guardar enlace</button></div>
+
+  <h3>Textos</h3>
+  <label for="tJuego">Sobre el juego</label><textarea id="tJuego"></textarea>
+  <label for="tNos">Sobre YAVIGA</label><textarea id="tNos"></textarea>
+  <div class="fila"><button class="btn chico" id="bTextos" type="button">Guardar textos</button></div>
+
+  <h3>Agregar integrante</h3>
+  <label for="mNombre">Nombre</label><input id="mNombre" type="text">
+  <label for="mRol">Rol</label><input id="mRol" type="text" placeholder="Programación, arte, música...">
+  <label for="mFoto">Foto</label><input id="mFoto" type="file" accept="image/*">
+  <div class="fila"><button class="btn chico terracota" id="bMiembro" type="button">Agregar</button></div>
+</aside>
+<div class="aviso" id="aviso" role="status"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, query, orderBy, limit, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* ================================================================
+   1) PEGA AQUÍ LA CONFIGURACIÓN DE TU APP WEB DE FIREBASE
+   (Consola de Firebase → Configuración del proyecto → Tus apps → Web)
+   ================================================================ */
+const firebaseConfig = {
+  apiKey: "PEGA_AQUI",
+  authDomain: "PEGA_AQUI",
+  projectId: "PEGA_AQUI",
+  storageBucket: "PEGA_AQUI",
+  messagingSenderId: "PEGA_AQUI",
+  appId: "PEGA_AQUI"
+};
+
+const $ = (id) => document.getElementById(id);
+$("anio").textContent = new Date().getFullYear();
+
+const configurado = !Object.values(firebaseConfig).some(v => v === "PEGA_AQUI");
+let auth, db, storage;
+const siteRef = () => doc(db, "site", "main");
+
+function aviso(msg){
+  const a = $("aviso"); a.textContent = msg; a.style.display = "block";
+  clearTimeout(aviso.t); aviso.t = setTimeout(() => a.style.display = "none", 3200);
+}
+
+if (configurado) {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app); db = getFirestore(app); storage = getStorage(app);
+
+  /* ---- Contenido público (se actualiza en vivo) ---- */
+  onSnapshot(siteRef(), (snap) => {
+    const d = snap.data() || {};
+    if (d.gameImageUrl) $("arteJuego").src = d.gameImageUrl;
+    if (d.logoUrl) { $("logoNav").src = d.logoUrl; $("logoNos").src = d.logoUrl; }
+    if (d.gameDescription) $("textoJuego").textContent = d.gameDescription;
+    if (d.aboutText) $("textoNosotros").textContent = d.aboutText;
+    if (d.zipUrl) document.querySelectorAll(".descargar-link").forEach(a => a.href = d.zipUrl);
+    $("notaVersion").textContent = d.version ? "Versión " + d.version : "";
+    // valores actuales en el panel
+    if (document.activeElement !== $("tJuego")) $("tJuego").value = d.gameDescription || $("textoJuego").textContent;
+    if (document.activeElement !== $("tNos")) $("tNos").value = d.aboutText || $("textoNosotros").textContent;
+  }, () => {});
+
+  onSnapshot(query(collection(db, "team"), orderBy("createdAt")), (snap) => {
+    const cont = $("miembros");
+    if (snap.empty) { cont.innerHTML = '<p class="vacio">Pronto presentaremos al equipo.</p>'; return; }
+    cont.textContent = "";
+    snap.forEach((s) => {
+      const m = s.data();
+      const card = document.createElement("div"); card.className = "miembro";
+      if (m.photoUrl) { const i = document.createElement("img"); i.src = m.photoUrl; i.alt = "Foto de " + m.name; card.append(i); }
+      const n = document.createElement("b"); n.textContent = m.name;
+      const r = document.createElement("span"); r.textContent = m.role || "";
+      const x = document.createElement("button"); x.type = "button"; x.className = "btn chico terracota quitar"; x.textContent = "Quitar";
+      x.onclick = async () => { if (confirm("¿Quitar a " + m.name + "?")) { await deleteDoc(doc(db, "team", s.id)); aviso("Integrante quitado"); } };
+      card.append(n, r, x); cont.append(card);
+    });
+  }, () => {});
+
+  /* ---- Visitas y descargas ---- */
+  const statsRef = doc(db, "site", "stats");
+  if (!sessionStorage.getItem("yv_vista")) {
+    sessionStorage.setItem("yv_vista", "1");
+    setDoc(statsRef, { views: increment(1), downloads: increment(0) }, { merge: true }).catch(() => {});
+  }
+  document.addEventListener("click", (e) => {
+    if (e.target.closest(".descargar-link"))
+      setDoc(statsRef, { views: increment(0), downloads: increment(1) }, { merge: true }).catch(() => {});
+  });
+  onSnapshot(statsRef, (s) => {
+    const d = s.data() || {};
+    $("stVistas").textContent = (d.views || 0).toLocaleString("es-MX");
+    $("stDesc").textContent = (d.downloads || 0).toLocaleString("es-MX");
+  }, () => {});
+
+  /* ---- Reseñas ---- */
+  const estrellas = (n) => "★".repeat(n) + '<span class="off">' + "★".repeat(5 - n) + "</span>";
+  onSnapshot(query(collection(db, "reviews"), orderBy("createdAt", "desc"), limit(50)), (snap) => {
+    const lista = $("listaRes");
+    if (snap.empty) { lista.innerHTML = '<p class="vacio">Aún no hay reseñas. Sé la primera persona en opinar.</p>'; $("promedio").hidden = true; return; }
+    lista.textContent = ""; let suma = 0;
+    snap.forEach((s) => {
+      const r = s.data(); suma += r.rating;
+      const card = document.createElement("article"); card.className = "res";
+      const head = document.createElement("header");
+      const n = document.createElement("b"); n.textContent = r.name;
+      const st = document.createElement("span"); st.className = "estrellas-fijas"; st.innerHTML = estrellas(r.rating); st.setAttribute("role", "img"); st.setAttribute("aria-label", r.rating + " de 5 estrellas");
+      const t = document.createElement("time"); t.textContent = r.createdAt ? r.createdAt.toDate().toLocaleDateString("es-MX", { day: "numeric", month: "short", year: "numeric" }) : "";
+      head.append(n, st, t); card.append(head);
+      if (r.comment) { const p = document.createElement("p"); p.textContent = r.comment; card.append(p); }
+      const x = document.createElement("button"); x.type = "button"; x.className = "btn chico terracota quitar"; x.textContent = "Quitar";
+      x.onclick = async () => { if (confirm("¿Quitar la reseña de " + r.name + "?")) { await deleteDoc(doc(db, "reviews", s.id)); aviso("Reseña quitada"); } };
+      card.append(x); lista.append(card);
+    });
+    const prom = suma / snap.size;
+    $("promedio").hidden = false; $("resNum").textContent = prom.toFixed(1);
+    $("resEstrellas").innerHTML = estrellas(Math.round(prom));
+    $("resTotal").textContent = snap.size + (snap.size === 1 ? " reseña" : " reseñas");
+  }, () => {});
+
+  if (localStorage.getItem("yv_resena")) { $("formRes").hidden = true; $("rGracias").hidden = false; }
+  $("formRes").onsubmit = async (e) => {
+    e.preventDefault(); $("rError").textContent = "";
+    const rating = parseInt((document.querySelector('input[name="rating"]:checked') || {}).value, 10);
+    const name = $("rNombre").value.trim();
+    if (!name) { $("rError").textContent = "Escribe tu nombre."; return; }
+    if (!rating) { $("rError").textContent = "Elige de 1 a 5 estrellas."; return; }
+    try {
+      await addDoc(collection(db, "reviews"), { name, rating, comment: $("rTexto").value.trim(), createdAt: serverTimestamp() });
+      localStorage.setItem("yv_resena", "1"); $("formRes").hidden = true; $("rGracias").hidden = false;
+    } catch (err) { $("rError").textContent = "No se pudo publicar. Intenta de nuevo."; console.error(err); }
+  };
+
+  /* ---- Acceso del equipo ---- */
+  onAuthStateChanged(auth, (u) => {
+    document.body.classList.toggle("admin", !!u);
+    $("btnAcceso").textContent = u ? "Cerrar sesión" : "Acceso del equipo";
+    if (!u) $("panel").classList.remove("abierto");
+  });
+}
+
+$("btnAcceso").onclick = async () => {
+  if (!configurado) return aviso("Primero pega tu configuración de Firebase en index.html");
+  if (auth.currentUser) { await signOut(auth); aviso("Sesión cerrada"); }
+  else $("dlgLogin").showModal();
+};
+$("lCancel").onclick = () => $("dlgLogin").close();
+$("formLogin").onsubmit = async (e) => {
+  e.preventDefault(); $("lError").textContent = "";
+  try { await signInWithEmailAndPassword(auth, $("lEmail").value, $("lPass").value); $("dlgLogin").close(); $("panel").classList.add("abierto"); }
+  catch { $("lError").textContent = "Correo o contraseña incorrectos."; }
+};
+$("abrirPanel").onclick = () => $("panel").classList.add("abierto");
+$("cerrarPanel").onclick = () => $("panel").classList.remove("abierto");
+
+/* ---- Subidas ---- */
+function subir(file, ruta, onProg){
+  return new Promise((ok, fail) => {
+    const t = uploadBytesResumable(ref(storage, ruta), file);
+    t.on("state_changed", (s) => onProg && onProg(s.bytesTransferred / s.totalBytes), fail, async () => ok(await getDownloadURL(t.snapshot.ref)));
+  });
+}
+const limpio = (n) => n.replace(/[^\w.\-]+/g, "_");
+const guardar = (datos) => setDoc(siteRef(), datos, { merge: true });
+
+async function subirImagen(inputId, campo, carpeta){
+  const f = $(inputId).files[0];
+  if (!f) return aviso("Elige un archivo primero");
+  try { aviso("Subiendo..."); const url = await subir(f, `site/${carpeta}-${Date.now()}-${limpio(f.name)}`); await guardar({ [campo]: url }); aviso("Listo, ya se ve en la página"); $(inputId).value = ""; }
+  catch (e) { aviso("No se pudo subir: revisa las reglas de Storage"); console.error(e); }
+}
+$("bArte").onclick = () => subirImagen("fArte", "gameImageUrl", "juego");
+$("bLogo").onclick = () => subirImagen("fLogo", "logoUrl", "logo");
+
+$("bZip").onclick = async () => {
+  const f = $("fZip").files[0];
+  if (!f) return aviso("Elige el archivo .zip primero");
+  const barra = $("progZip"); barra.style.display = "block";
+  try {
+    const url = await subir(f, `downloads/${Date.now()}-${limpio(f.name)}`, (p) => barra.firstElementChild.style.width = (p * 100).toFixed(0) + "%");
+    await guardar({ zipUrl: url, version: $("vVersion").value.trim() });
+    aviso("Zip subido: el botón ya descarga este archivo"); $("fZip").value = "";
+  } catch (e) { aviso("No se pudo subir el zip: revisa Storage y sus reglas"); console.error(e); }
+  barra.style.display = "none"; barra.firstElementChild.style.width = "0";
+};
+$("bUrl").onclick = async () => {
+  const u = $("uZip").value.trim();
+  if (!/^https:\/\//.test(u)) return aviso("Pega un enlace que empiece con https://");
+  await guardar({ zipUrl: u, version: $("vVersion").value.trim() }); aviso("Enlace guardado");
+};
+$("bTextos").onclick = async () => { await guardar({ gameDescription: $("tJuego").value.trim(), aboutText: $("tNos").value.trim() }); aviso("Textos guardados"); };
+
+$("bMiembro").onclick = async () => {
+  const nombre = $("mNombre").value.trim();
+  if (!nombre) return aviso("Escribe el nombre");
+  try {
+    let photoUrl = ""; const f = $("mFoto").files[0];
+    if (f) photoUrl = await subir(f, `team/${Date.now()}-${limpio(f.name)}`);
+    await addDoc(collection(db, "team"), { name: nombre, role: $("mRol").value.trim(), photoUrl, createdAt: serverTimestamp() });
+    $("mNombre").value = ""; $("mRol").value = ""; $("mFoto").value = ""; aviso("Integrante agregado");
+  } catch (e) { aviso("No se pudo agregar"); console.error(e); }
+};
+</script>
+</body>
+</html>
